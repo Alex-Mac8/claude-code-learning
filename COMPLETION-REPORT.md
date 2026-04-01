@@ -308,14 +308,14 @@ git commit -m "Initial course structure: Week 1 MVP + PWA website"
 
 ```bash
 # 1. 推送到 GitHub
-git remote add origin https://github.com/YOUR_USERNAME/claude-code-learning.git
+git remote add origin https://github.com/Alex-Mac8/claude-code-learning.git
 git push -u origin main
 
 # 2. 启用 GitHub Pages
 # Settings → Pages → Source: main branch / root
 
 # 3. 访问
-# https://YOUR_USERNAME.github.io/claude-code-learning/website/
+# https://Alex-Mac8.github.io/claude-code-learning/website/
 ```
 
 **优点**：免费、自动 HTTPS、CDN 加速

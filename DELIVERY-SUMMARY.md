@@ -135,7 +135,7 @@ claude-code-learning/
    git add .
    git commit -m "Initial course structure"
    git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/claude-code-learning.git
+   git remote add origin https://github.com/Alex-Mac8/claude-code-learning.git
    git push -u origin main
    
    # 启用 GitHub Pages (Settings → Pages → Source: main branch / root)
@@ -143,7 +143,7 @@ claude-code-learning/
 
 2. **访问课程**
    ```
-   https://YOUR_USERNAME.github.io/claude-code-learning/website/
+   https://Alex-Mac8.github.io/claude-code-learning/website/
    ```
 
 3. **安装到桌面**
@@ -155,7 +155,7 @@ claude-code-learning/
 
 ```bash
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/claude-code-learning.git
+git clone https://github.com/Alex-Mac8/claude-code-learning.git
 cd claude-code-learning
 
 # 启动本地服务器
@@ -287,7 +287,7 @@ done
 ### Placeholder 检查
 ```bash
 # 确保没有未替换的占位符
-grep -r "YOUR_USERNAME\|YOUR_REPO\|TODO" .
+grep -r "Alex-Mac8\|claude-code-learning\|TODO" .
 # 应该返回空（或只有代码示例中的 TODO）
 ```
 
@@ -338,8 +338,8 @@ npx http-server website -p 8080
 
 ## 📞 联系与反馈
 
-- **GitHub Issues**: [提交 Bug 或建议](https://github.com/YOUR_USERNAME/claude-code-learning/issues)
-- **Discussions**: [学习交流](https://github.com/YOUR_USERNAME/claude-code-learning/discussions)
+- **GitHub Issues**: [提交 Bug 或建议](https://github.com/Alex-Mac8/claude-code-learning/issues)
+- **Discussions**: [学习交流](https://github.com/Alex-Mac8/claude-code-learning/discussions)
 - **RedNote**: [@702329823](https://www.xiaohongshu.com/user/profile/702329823) - 作者分享 AI 工具学习
 
 ---
