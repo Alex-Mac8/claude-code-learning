@@ -21,34 +21,34 @@
 | Day 1 | [Agent 系统概览](week-01/day-01-agent-overview.md) | ReAct 循环、架构分层、目录结构 |
 | Day 2 | [Terminal UI 基础 (Ink)](week-01/day-02-ink-basics.md) | React 组件、布局系统、事件处理 |
 | Day 3 | [Ink 高级特性](week-01/day-03-ink-advanced.md) | 自定义渲染、性能优化、流式输出 |
-| Day 4 | [Tool 系统设计](week-01/day-04-tool-system.md) | Tool 接口、参数验证、结果处理 |
-| Day 5 | [沙箱与安全](week-01/day-05-sandbox-security.md) | 进程隔离、权限控制、逃逸防护 |
-| Day 6 | [State 管理](week-01/day-06-state-management.md) | 会话状态、持久化、恢复机制 |
-| Day 7 | [第一周回顾 + 项目实践](week-01/day-07-week1-review.md) | 构建简单的 CLI Agent 原型 |
+| Day 4 | [Tool System 基础](week-01/day-04-tool-system.md) | Tool.ts、工具注册、参数验证 |
+| Day 5 | [Context Management](week-01/day-05-context-management.md) | 上下文窗口、Prompt Cache、优化策略 |
+| Day 6 | [BashTool 深入](week-01/day-06-bash-tool.md) | BashTool、沙盒、权限检查、安全规则 |
+| Day 7 | [Week 1 项目](week-01/day-07-week1-project.md) | 构建简单的 CLI Agent |
 
 ### 第二周：核心能力（Building）
 
 | 天数 | 主题 | 核心内容 |
 |------|------|----------|
-| Day 8 | [工具实现：文件操作](week-02/day-08-file-tools.md) | FileRead、FileWrite、FileEdit |
-| Day 9 | [工具实现：Shell 执行](week-02/day-09-shell-tools.md) | BashTool、安全检查、输出流 |
-| Day 10 | [上下文管理](week-02/day-10-context-management.md) | 三级压缩、缓存策略、Token 优化 |
-| Day 11 | [Memory 系统](week-02/day-11-memory-system.md) | 四层记忆结构、检索、持久化 |
-| Day 12 | [System Prompt 工程](week-02/day-12-system-prompt.md) | 提示词拼装、分层缓存、失效检测 |
-| Day 13 | [子 Agent 协调](week-02/day-13-sub-agent.md) | 任务分发、通信协议、结果聚合 |
-| Day 14 | [第二周回顾 + 项目实践](week-02/day-14-week2-review.md) | 添加完整 Tool 系统 + Context 管理 |
+| Day 8 | [File Operations](week-02/day-08-file-operations.md) | FileRead、FileWrite、FileEdit 工具 |
+| Day 9 | [Glob & Grep](week-02/day-09-glob-grep.md) | 文件搜索、内容检索、正则表达式 |
+| Day 10 | [Agent Task System](week-02/day-10-agent-task.md) | Task.ts、LocalAgentTask、任务编排 |
+| Day 11 | [QueryEngine 详解](week-02/day-11-query-engine.md) | API 调用、流式响应、错误处理 |
+| Day 12 | [Message & UI](week-02/day-12-message-ui.md) | 消息渲染、Diff 显示、PromptInput |
+| Day 13 | [Coordinator Mode](week-02/day-13-coordinator.md) | 多 Agent 协调、工作分配、结果汇总 |
+| Day 14 | [Week 2 项目](week-02/day-14-week2-project.md) | 构建文件处理 Agent |
 
 ### 第三周：进阶功能（Advanced）
 
 | 天数 | 主题 | 核心内容 |
 |------|------|----------|
-| Day 15 | [任务图与状态机](week-03/day-15-task-graph.md) | 父子关系、回收机制、可视化 |
-| Day 16 | [后台任务系统](week-03/day-16-background-tasks.md) | Cron 调度、Dream Agent、异步处理 |
-| Day 17 | [Skill 与 MCP](week-03/day-17-skill-mcp.md) | Prompt 模板、外部服务集成 |
-| Day 18 | [安全审计](week-03/day-18-security-audit.md) | OWASP Top 10、权限控制、日志监控 |
-| Day 19 | [性能优化](week-03/day-19-performance.md) | 并发控制、缓存策略、内存管理 |
-| Day 20 | [测试与调试](week-03/day-20-testing-debugging.md) | 单元测试、集成测试、调试技巧 |
-| Day 21 | [Capstone 项目](week-03/day-21-capstone.md) | 构建完整的个人 AI Assistant |
+| Day 15 | [Security Architecture](week-03/day-15-security.md) | 沙盒、权限系统、Zsh 威胁模型 |
+| Day 16 | [Anti-Distillation](week-03/day-16-anti-distillation.md) | 假工具注入、Connector Text、客户端认证 |
+| Day 17 | [Prompt Cache 优化](week-03/day-17-prompt-cache.md) | Cache-break 检测、Sticky Latches |
+| Day 18 | [Performance](week-03/day-18-performance.md) | Ink 优化、ASCII Pool、Patch Optimizer |
+| Day 19 | [MCP Integration](week-03/day-19-mcp.md) | Model Context Protocol、Server 管理 |
+| Day 20 | [Production Patterns](week-03/day-20-production.md) | 错误处理、日志、GrowthBook Feature Flags |
+| Day 21 | [Capstone Project](week-03/day-21-capstone.md) | 构建完整的 AI Agent CLI |
 
 ## 🎯 学习成果
 
@@ -68,14 +68,14 @@
 
 访问课程网站（PWA 应用，可安装到桌面）：
 ```
-https://your-username.github.io/claude-code-learning/
+https://CeciliaW888.github.io/claude-code-learning/
 ```
 
 ### 本地学习
 
 克隆仓库并在编辑器中阅读：
 ```bash
-git clone https://github.com/your-username/claude-code-learning.git
+git clone https://github.com/CeciliaW888/claude-code-learning.git
 cd claude-code-learning
 ```
 
@@ -105,8 +105,8 @@ cd claude-code-learning
 
 ## 💬 社区与支持
 
-- **问题讨论**：[GitHub Issues](https://github.com/your-username/claude-code-learning/issues)
-- **学习笔记分享**：[GitHub Discussions](https://github.com/your-username/claude-code-learning/discussions)
+- **问题讨论**：[GitHub Issues](https://github.com/CeciliaW888/claude-code-learning/issues)
+- **学习笔记分享**：[GitHub Discussions](https://github.com/CeciliaW888/claude-code-learning/discussions)
 - **作者 RedNote**：[@702329823](https://www.xiaohongshu.com/user/profile/702329823) - AI 工具与学习分享
 
 ## 🎓 进阶学习
