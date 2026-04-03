@@ -1,135 +1,50 @@
-{
-  "title": "Week 3 Quiz: Advanced 进阶检测",
-  "description": "测试你对安全架构、Prompt Cache、性能优化、MCP 和生产模式的理解",
-  "totalPoints": 100,
-  "passingScore": 70,
-  "timeLimit": 20,
-  "questions": [
-    {
-      "id": 1,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "Claude Code 的安全架构有几层？最底层是什么？",
-      "options": [
-        "2 层，最底层是命令检查",
-        "3 层，最底层是文件系统隔离",
-        "4 层，最底层是进程沙盒",
-        "5 层，最底层是硬件隔离"
-      ],
-      "correctAnswer": 2,
-      "explanation": "4 层安全架构：用户权限控制 → 命令级安全 → 文件系统隔离 → 进程沙盒（最底层）。沙盒使用 macOS Sandbox 或 Linux seccomp 提供进程级隔离。"
-    },
-    {
-      "id": 2,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "Anti-Distillation 中的「假工具注入」如何工作？",
-      "options": [
-        "注入恶意代码到模型中",
-        "在工具列表中混入不存在的工具，蒸馏模型会学会调用它们",
-        "禁用所有工具",
-        "加密工具描述"
-      ],
-      "correctAnswer": 1,
-      "explanation": "假工具注入在真实工具列表中混入不存在的工具。真正的 Claude 知道不应该调用这些工具，但蒸馏模型不知道，会尝试调用它们 — 从而暴露身份。"
-    },
-    {
-      "id": 3,
-      "type": "multiple-choice",
-      "points": 15,
-      "question": "Prompt Cache 的价格是正常输入价格的多少？",
-      "options": [
-        "免费（0%）",
-        "10%（$0.30/M vs $3.0/M）",
-        "50%（$1.50/M vs $3.0/M）",
-        "80%（$2.40/M vs $3.0/M）"
-      ],
-      "correctAnswer": 1,
-      "explanation": "Prompt Cache 读取价格是 $0.30/M tokens，是正常输入价格 $3.0/M 的 10%。但缓存创建成本是 $3.75/M（比正常输入贵 25%），所以只有多次命中才能真正省钱。"
-    },
-    {
-      "id": 4,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "Line-width Cache 解决什么问题？",
-      "options": [
-        "缓存网络请求",
-        "缓存 API 响应",
-        "缓存字符串显示宽度计算（中文字符占 2 格）",
-        "缓存文件内容"
-      ],
-      "correctAnswer": 2,
-      "explanation": "Terminal UI 需要频繁计算字符串的显示宽度（中文/emoji 占 2 格，ASCII 占 1 格）。Line-width Cache 缓存这些计算结果，避免每帧都重新计算。"
-    },
-    {
-      "id": 5,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "MCP 工具在 Claude Code 中的命名格式是什么？",
-      "options": [
-        "toolName",
-        "serverName.toolName",
-        "mcp__serverName__toolName",
-        "mcp/serverName/toolName"
-      ],
-      "correctAnswer": 2,
-      "explanation": "MCP 工具使用 mcp__serverName__toolName 的命名格式，使用双下划线分隔。例如 Slack 服务器的发消息工具：mcp__slack__send_message。"
-    },
-    {
-      "id": 6,
-      "type": "true-false",
-      "points": 10,
-      "question": "GrowthBook Feature Flags 的值总是最新的，不会有延迟。",
-      "correctAnswer": false,
-      "explanation": "错误。函数名 getFeatureValue_CACHED_MAY_BE_STALE 明确表示值可能是过期的缓存。这是性能和实时性的权衡 — 避免每次都请求远程服务。"
-    },
-    {
-      "id": 7,
-      "type": "multiple-select",
-      "points": 15,
-      "question": "以下哪些会导致 Prompt Cache 失效？（多选）",
-      "options": [
-        "工作目录变化（cd 命令）",
-        "用户输入新消息",
-        "Git 分支切换",
-        "日期变化（跨天）",
-        "CLAUDE.md 文件修改"
-      ],
-      "correctAnswers": [0, 2, 3, 4],
-      "explanation": "工作目录变化、Git 分支切换、日期变化、CLAUDE.md 修改都会改变 System Prompt，导致缓存失效。用户输入新消息不会影响 System Prompt 的缓存。"
-    },
-    {
-      "id": 8,
-      "type": "scenario",
-      "points": 20,
-      "question": "设计一个安全的 Agent 工具调用流程，排列以下步骤：",
-      "options": [
-        "执行工具并返回结果",
-        "验证输入参数（validateInput）",
-        "检查权限（checkPermissions）",
-        "解析工具调用请求",
-        "安全审计记录"
-      ],
-      "correctOrder": [3, 1, 2, 0, 4],
-      "explanation": "正确流程：1) 解析请求 → 2) 验证输入（格式、路径合法性）→ 3) 检查权限（allow/ask/deny）→ 4) 执行工具 → 5) 审计记录。验证在权限之前，因为无效输入不需要检查权限。"
-    }
-  ],
-  "flashcards": [
-    {
-      "front": "什么是 Distillation 攻击？",
-      "back": "通过大量调用 AI 模型 API，收集输入输出对，用来训练一个替代模型。本质是'偷学'模型的能力，无需授权。"
-    },
-    {
-      "front": "Sticky Latch 缓存策略是什么？",
-      "back": "一旦某个值被缓存（如 git status），即使有微小变化也尽量保持不变，避免频繁的缓存失效。只有显著变化才触发更新。牺牲少量实时性换取大量的缓存节省。"
-    },
-    {
-      "front": "MCP 和 LSP 有什么区别？",
-      "back": "MCP（Model Context Protocol）是 AI Agent 的通用插件接口，连接外部服务和工具。LSP（Language Server Protocol）是代码编辑器的语言智能接口，提供补全、跳转、诊断等。两者都是标准化的客户端-服务器协议。"
-    },
-    {
-      "front": "生产环境中的错误应该如何分类？",
-      "back": "分为 5 类：network（网络，可重试）、auth（认证，不可重试）、rate_limit（限流，可重试）、server（服务端，可重试）、client（客户端，不可重试）。可重试的错误使用指数退避策略。"
-    }
-  ]
-}
+[
+  {
+    "id": "w3q1",
+    "day": 15,
+    "question": "Claude Code 的多层安全模型有几层？",
+    "options": ["2 层", "3 层", "4 层", "5 层"],
+    "answer": 2,
+    "explanation": "4 层：权限模式（全局）→ 工具级权限 → 命令安全 → 沙盒隔离。"
+  },
+  {
+    "id": "w3q2",
+    "day": 16,
+    "question": "MCP（Model Context Protocol）的核心作用是什么？",
+    "options": ["加密通信", "标准化 AI 工具集成", "压缩数据", "管理用户权限"],
+    "answer": 1,
+    "explanation": "MCP 是 Anthropic 推出的标准协议，让 AI Agent 可以统一连接各种外部工具和数据源。"
+  },
+  {
+    "id": "w3q3",
+    "day": 17,
+    "question": "Claude Code 的任务系统中，前台任务和后台任务的区别是什么？",
+    "options": ["执行速度不同", "前台可见可中断，后台静默执行", "使用不同的 API", "前台用 GPU，后台用 CPU"],
+    "answer": 1,
+    "explanation": "前台任务用户可以看到输出和中断，后台任务静默执行完成后通知。"
+  },
+  {
+    "id": "w3q4",
+    "day": 18,
+    "question": "Claude Code 使用什么模式管理全局状态？",
+    "options": ["Redux", "React Context + Provider", "全局变量", "EventEmitter"],
+    "answer": 1,
+    "explanation": "Claude Code 使用 React Context + Provider 模式，通过 AppStateProvider 为整个组件树提供状态。"
+  },
+  {
+    "id": "w3q5",
+    "day": 20,
+    "question": "多 Agent 并行工作时，Claude Code 如何避免文件冲突？",
+    "options": ["文件锁", "Git Worktree 隔离", "只读模式", "排队执行"],
+    "answer": 1,
+    "explanation": "每个 Agent 在自己的 git worktree 中工作，有独立的文件副本，避免同时修改同一个文件。"
+  },
+  {
+    "id": "w3q6",
+    "day": 19,
+    "question": "Prompt Cache 的作用是什么？",
+    "options": ["缓存用户输入", "降低重复 System Prompt 的 API 成本", "加速模型推理", "存储对话历史"],
+    "answer": 1,
+    "explanation": "Prompt Cache 让重复的 System Prompt 部分不需要每次都计费，缓存命中的 token 价格更低。"
+  }
+]

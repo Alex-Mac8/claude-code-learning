@@ -1,135 +1,50 @@
-{
-  "title": "Week 2 Quiz: Building 核心能力检测",
-  "description": "测试你对文件操作、搜索系统、QueryEngine 和 Coordinator Mode 的理解",
-  "totalPoints": 100,
-  "passingScore": 70,
-  "timeLimit": 20,
-  "questions": [
-    {
-      "id": 1,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "Claude Code 为什么有三个文件工具（Read、Write、Edit）而不是一个？",
-      "options": [
-        "历史原因，早期版本只有一个",
-        "Read 只读低风险、Write 创建/覆写、Edit 只传 diff 节省 tokens",
-        "不同的开发者分别实现的",
-        "为了兼容不同的操作系统"
-      ],
-      "correctAnswer": 1,
-      "explanation": "三个工具有明确的职责分离：Read 是只读操作（低风险），Write 用于创建或完全覆写文件，Edit 只传差异部分（大幅节省 tokens）。这种设计优化了安全性和成本。"
-    },
-    {
-      "id": 2,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "FileWriteTool 在覆写已有文件时，要求必须先做什么？",
-      "options": [
-        "创建备份",
-        "用 Read 工具读取过该文件",
-        "获得管理员权限",
-        "检查 Git 状态"
-      ],
-      "correctAnswer": 1,
-      "explanation": "FileWriteTool 检查 readFileState 缓存，如果文件已存在但未被 Read 过，会拒绝写入。这防止 Agent 在不了解文件内容的情况下盲目覆写。"
-    },
-    {
-      "id": 3,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "GrepTool 底层使用什么搜索引擎？",
-      "options": [
-        "Node.js 内置 grep",
-        "GNU grep",
-        "ripgrep (rg)",
-        "ag (Silver Searcher)"
-      ],
-      "correctAnswer": 2,
-      "explanation": "GrepTool 使用 ripgrep（rg），它比传统 grep 快 10-100 倍，自动跳过 .gitignore 文件和二进制文件，支持并行搜索。"
-    },
-    {
-      "id": 4,
-      "type": "multiple-choice",
-      "points": 10,
-      "question": "Claude Code 定义了几种任务类型（TaskType）？",
-      "options": [
-        "3 种",
-        "5 种",
-        "7 种",
-        "10 种"
-      ],
-      "correctAnswer": 2,
-      "explanation": "7 种任务类型：local_bash、local_agent、remote_agent、in_process_teammate、local_workflow、monitor_mcp、dream。每种有不同的 ID 前缀（b-、a-、r-、t-、w-、m-、d-）。"
-    },
-    {
-      "id": 5,
-      "type": "multiple-choice",
-      "points": 15,
-      "question": "QueryEngine 在构建 System Prompt 时，为什么把变化频率低的内容放在前面？",
-      "options": [
-        "方便阅读和维护",
-        "TypeScript 编译器要求的",
-        "为了 Prompt Cache 命中率 — 不变的前缀可以被缓存",
-        "为了让 AI 先看到重要信息"
-      ],
-      "correctAnswer": 2,
-      "explanation": "Anthropic 的 Prompt Cache 基于前缀匹配。不变的内容放前面形成稳定的缓存前缀，变化的内容放后面只影响少量 tokens。缓存命中可以节省 ~90% 的 System Prompt 成本。"
-    },
-    {
-      "id": 6,
-      "type": "true-false",
-      "points": 10,
-      "question": "Coordinator Mode 中的子 Agent 可以直接访问父 Agent 的对话历史。",
-      "correctAnswer": false,
-      "explanation": "错误。子 Agent 的消息历史从空开始（messages: []），不继承父 Agent 的对话历史。它们通过 scratchpad 文件系统进行通信。"
-    },
-    {
-      "id": 7,
-      "type": "multiple-select",
-      "points": 15,
-      "question": "以下哪些是 GrepTool 支持的输出模式？（多选）",
-      "options": [
-        "content（显示匹配行）",
-        "files_with_matches（只显示文件名）",
-        "count（显示匹配数量）",
-        "json（JSON 格式输出）",
-        "stats（显示统计信息）"
-      ],
-      "correctAnswers": [0, 1, 2],
-      "explanation": "GrepTool 支持三种输出模式：content（默认，显示匹配行和上下文）、files_with_matches（只列文件名）、count（显示每个文件的匹配数）。"
-    },
-    {
-      "id": 8,
-      "type": "scenario",
-      "points": 20,
-      "question": "当 API 返回 429 (Rate Limit) 错误时，QueryEngine 的正确处理顺序是：",
-      "options": [
-        "立即向用户显示错误",
-        "等待一段时间后重试（指数退避）",
-        "分析错误是否可重试",
-        "记录错误日志",
-        "切换到备用模型"
-      ],
-      "correctOrder": [2, 3, 1, 0],
-      "explanation": "正确流程：1) 分析错误类型（429 是可重试的）→ 2) 记录日志 → 3) 指数退避重试 → 4) 如果重试耗尽，才向用户显示错误。不会自动切换模型。"
-    }
-  ],
-  "flashcards": [
-    {
-      "front": "FileEditTool 比 FileWriteTool 的优势？",
-      "back": "FileEditTool 只传 old_string 和 new_string（差异部分），而 FileWriteTool 需要传整个文件内容。对于大文件的小修改，Edit 可以节省 98%+ 的 tokens。"
-    },
-    {
-      "front": "为什么 FileReadTool 的 maxResultSizeChars 是 Infinity？",
-      "back": "因为如果截断文件内容并存到磁盘，Agent 需要再次调用 Read 来读取存储的结果，形成 Read→存储→Read 的死循环。FileReadTool 自身通过 offset/limit 参数控制读取范围。"
-    },
-    {
-      "front": "isTerminalTaskStatus 判断哪些状态？",
-      "back": "completed、failed、killed 三种状态是终端状态。处于终端状态的任务不会再转换到其他状态，可以安全清理。"
-    },
-    {
-      "front": "Coordinator Mode 中子 Agent 如何通信？",
-      "back": "通过 scratchpad 目录（文件系统）。Worker A 将结果写入 scratchpad 文件，Worker B 读取该文件获取输入。这种方式简单可靠，不需要进程间通信。"
-    }
-  ]
-}
+[
+  {
+    "id": "w2q1",
+    "day": 8,
+    "question": "BashTool 使用什么技术来检测危险命令？",
+    "options": ["正则表达式", "AST（抽象语法树）解析", "字符串包含检查", "机器学习分类"],
+    "answer": 1,
+    "explanation": "BashTool 使用 AST 解析 Shell 命令结构，比正则更准确地检测危险操作如管道命令链。"
+  },
+  {
+    "id": "w2q2",
+    "day": 9,
+    "question": "FileEditTool 为什么使用文本匹配（old_str/new_str）而不是行号编辑？",
+    "options": ["性能更好", "行号会随编辑偏移", "更容易实现", "API 要求"],
+    "answer": 1,
+    "explanation": "行号在多次编辑后会偏移。文本匹配更可靠——只要内容不变，匹配就准确。"
+  },
+  {
+    "id": "w2q3",
+    "day": 10,
+    "question": "query() 核心循环什么时候会终止？",
+    "options": ["固定循环 10 次", "Claude 不再调用任何工具时", "用户输入 exit 时", "超过 5 分钟时"],
+    "answer": 1,
+    "explanation": "当 Claude 返回的消息不包含任何 tool_use 块时，表示任务完成，循环终止。"
+  },
+  {
+    "id": "w2q4",
+    "day": 11,
+    "question": "CLAUDE.md 文件的搜索优先级是怎样的？",
+    "options": ["用户级 > 项目级", "项目级 > 用户级", "只看项目级", "随机选择"],
+    "answer": 1,
+    "explanation": "项目级 CLAUDE.md 优先于用户级，这样每个项目可以有自己的规则覆盖全局设置。"
+  },
+  {
+    "id": "w2q5",
+    "day": 12,
+    "question": "Claude Code 的三种压缩策略中，最简单的是哪个？",
+    "options": ["Full Compact", "MicroCompact", "Snip Compact", "Auto Compact"],
+    "answer": 2,
+    "explanation": "Snip Compact 最简单——直接截断过长的工具输出，保留头尾。"
+  },
+  {
+    "id": "w2q6",
+    "day": 13,
+    "question": "子 Agent 在什么情况下会自动转为后台执行？",
+    "options": ["立即后台化", "运行超过 2 分钟时", "用户请求时", "内存不足时"],
+    "answer": 1,
+    "explanation": "Claude Code 设置了 AUTO_BACKGROUND_MS = 120_000，即 2 分钟后自动后台化。"
+  }
+]

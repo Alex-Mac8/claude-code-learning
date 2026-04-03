@@ -1,139 +1,340 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="21天从零构建 AI Agent CLI 工具 - 基于 Claude Code 源码">
-  <meta name="theme-color" content="#c4825a">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Claude Code 学习">
-  <title>Claude Code 源码学习课程 - 21天 AI Agent 实战</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --primary: #c4825a; --primary-dark: #a86d45; --bg: #f5f0eb;
-      --text: #2c2c2c; --text-light: #666; --border: #e0d5ce;
-      --success: #4caf50; --info: #2196f3;
-    }
-    body { font-family: 'Noto Sans SC', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-    header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 2rem 1rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    header p { opacity: 0.95; font-size: 1.1rem; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
-    .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
-    .stat-card h3 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
-    .stat-card p { color: var(--text-light); font-size: 0.9rem; }
-    .week-section { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .week-header { display: flex; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--border); }
-    .week-number { background: var(--primary); color: white; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin-right: 1rem; }
-    .week-info h2 { color: var(--text); margin-bottom: 0.25rem; }
-    .week-info p { color: var(--text-light); font-size: 0.9rem; }
-    .days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
-    .day-card { border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.3s ease; cursor: pointer; background: white; text-decoration: none; color: inherit; display: block; }
-    .day-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(196,130,90,0.15); transform: translateY(-2px); }
-    .day-card.completed { border-color: var(--success); background: linear-gradient(135deg, #f0fff0, white); }
-    .day-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
-    .day-number { font-weight: bold; color: var(--primary); }
-    .day-status { font-size: 1.5rem; }
-    .day-title { font-weight: 600; margin-bottom: 0.5rem; }
-    .day-topics { font-size: 0.85rem; color: var(--text-light); line-height: 1.4; }
-    .install-prompt { position: fixed; bottom: 2rem; right: 2rem; background: var(--primary); color: white; padding: 1rem 1.5rem; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; display: none; align-items: center; gap: 0.5rem; font-weight: 500; }
-    .install-prompt.show { display: flex; }
-    footer { text-align: center; padding: 2rem; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 3rem; }
-    footer a { color: var(--primary); }
-    @media (max-width: 768px) { header h1 { font-size: 1.5rem; } .days-grid { grid-template-columns: 1fr; } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 源码解析 — 21天学习路径</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c4825a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CC学习">
+<style>
+:root{--primary:#c4825a;--primary-hover:#b07149;--bg-base:#f5f0eb;--bg-card:#ffffff;--bg-hover:#fef9f5;--text-primary:#2d2d2d;--text-secondary:#6b6b6b;--text-muted:#999;--accent-green:#4a7c59;--accent-yellow:#f4d35e;--accent-blue:#5b8fa3;--accent-red:#c86b5a;--border:#e5ddd5;--border-light:#f0ebe6;--font-heading:'Noto Serif SC',Georgia,serif;--font-body:'Inter',-apple-system,sans-serif;--font-code:'JetBrains Mono','Fira Code',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg-base);color:var(--text-primary);line-height:1.6}
+.skip-link{position:absolute;top:-40px;left:0;background:var(--primary);color:#fff;padding:8px 16px;z-index:100;text-decoration:none}.skip-link:focus{top:0}
+header{background:var(--primary);color:#fff;padding:2rem 1.5rem;text-align:center}
+header h1{font-family:var(--font-heading);font-size:1.8rem;margin-bottom:0.5rem}
+header p{opacity:0.9;font-size:0.95rem}
+.progress-section{background:var(--bg-card);padding:1rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.progress-bar{height:8px;background:var(--border-light);border-radius:4px;overflow:hidden;margin-bottom:0.5rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-green),var(--primary));transition:width 0.3s;width:0%}
+.progress-text{font-size:0.85rem;color:var(--text-secondary);display:flex;justify-content:space-between}
+nav{background:var(--bg-card);border-bottom:1px solid var(--border);padding:0.75rem 1.5rem;display:flex;gap:0.5rem;overflow-x:auto}
+nav button{background:none;border:2px solid var(--border);padding:0.4rem 1rem;border-radius:20px;font-size:0.85rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;font-family:var(--font-body)}
+nav button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+nav button:hover:not(.active){border-color:var(--primary);color:var(--primary)}
+main{max-width:800px;margin:0 auto;padding:1.5rem}
+.week-section{margin-bottom:2rem}
+.week-title{font-family:var(--font-heading);font-size:1.3rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.day-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:0.75rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:1rem}
+.day-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(196,130,90,0.1)}
+.day-card.completed{border-left:4px solid var(--accent-green)}
+.day-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0}
+.day-num.beginner{background:#e8f5e9;color:#2e7d32}
+.day-num.intermediate{background:#fff8e1;color:#f57f17}
+.day-num.advanced{background:#fce4ec;color:#c62828}
+.day-info{flex:1}
+.day-title{font-weight:600;font-size:1rem;margin-bottom:0.2rem}
+.day-meta{font-size:0.8rem;color:var(--text-muted)}
+.day-check{width:24px;height:24px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;cursor:pointer}
+.day-check.done{background:var(--accent-green);border-color:var(--accent-green);color:#fff}
+.section-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+.section-card h3{font-family:var(--font-heading);margin-bottom:0.75rem}
+#quiz-section .quiz-card{background:var(--bg-card);border-left:4px solid var(--accent-blue);padding:1.25rem;border-radius:8px;margin-bottom:1rem}
+.quiz-card .question{font-weight:600;margin-bottom:0.75rem}
+.quiz-option{padding:0.5rem 0.75rem;border:2px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:0.5rem;transition:all 0.2s}
+.quiz-option:hover{border-color:var(--primary);background:var(--bg-hover)}
+.quiz-option.correct{border-color:var(--accent-green);background:rgba(74,124,89,0.1)}
+.quiz-option.incorrect{border-color:var(--accent-red);background:rgba(200,107,90,0.1)}
+.quiz-explanation{margin-top:0.75rem;padding:0.75rem;background:var(--bg-hover);border-radius:8px;font-size:0.9rem;display:none}
+.flashcard{perspective:1000px;min-height:200px;margin-bottom:1rem;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;height:200px;transition:transform 0.6s;transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;padding:1.5rem;display:flex;align-items:center;justify-content:center;text-align:center}
+.flashcard-front{background:var(--bg-card);border:2px solid var(--primary);font-size:1.2rem;font-weight:600;font-family:var(--font-heading)}
+.flashcard-back{background:var(--primary);color:#fff;transform:rotateY(180deg);font-size:0.95rem;line-height:1.5}
+.flashcard-nav{display:flex;justify-content:center;gap:1rem;margin-top:1rem}
+.flashcard-nav button{background:var(--primary);color:#fff;border:none;padding:0.5rem 1.5rem;border-radius:8px;cursor:pointer;font-size:0.9rem}
+.flashcard-nav button:hover{background:var(--primary-hover)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+#install-banner{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);border-top:1px solid var(--border);padding:1rem 1.5rem;align-items:center;gap:1rem;z-index:20;box-shadow:0 -4px 12px rgba(0,0,0,0.1)}
+#install-banner .install-text{flex:1}
+#install-banner .install-text strong{display:block;margin-bottom:0.2rem}
+#install-banner button{border:none;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-size:0.9rem}
+#install-accept{background:var(--primary);color:#fff}
+#install-dismiss{background:var(--border-light);color:var(--text-secondary)}
+@media(prefers-color-scheme:dark){:root{--bg-base:#1a1a1a;--bg-card:#2d2d2d;--bg-hover:#333;--text-primary:#e0e0e0;--text-secondary:#aaa;--text-muted:#777;--border:#444;--border-light:#333}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>🚀 Claude Code 源码学习课程</h1>
-    <p>21天从零构建工业级 AI Agent CLI 工具</p>
-  </header>
-  <div class="container">
-    <div class="stats">
-      <div class="stat-card"><h3>21</h3><p>学习天数</p></div>
-      <div class="stat-card"><h3>60+</h3><p>代码示例</p></div>
-      <div class="stat-card"><h3>516K</h3><p>源码行数</p></div>
-      <div class="stat-card"><h3>3</h3><p>实战项目</p></div>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<header>
+<h1>🤖 Claude Code 源码解析</h1>
+<p>21天构建 AI Agent CLI 工具 · 每天1小时 · 基于真实源码</p>
+</header>
+
+<div class="progress-section">
+<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+<div class="progress-text"><span id="progress-label">0/21 天完成</span><span id="progress-pct">0%</span></div>
+</div>
+
+<nav>
+<button class="active" onclick="showTab('curriculum')">📚 课程</button>
+<button onclick="showTab('quiz')">🎯 测验</button>
+<button onclick="showTab('flashcards')">🃏 闪卡</button>
+<button onclick="showTab('resources')">📖 资源</button>
+</nav>
+
+<main id="main">
+<!-- 课程标签 -->
+<div id="tab-curriculum" class="tab-content active">
+
+<div class="week-section">
+<div class="week-title">🟢 第一周：基础篇</div>
+<div class="day-card" onclick="openDay(1)"><div class="day-num beginner">01</div><div class="day-info"><div class="day-title">架构总览</div><div class="day-meta">三层架构 · Tool 系统 · Agent 循环</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(1)"></div></div>
+<div class="day-card" onclick="openDay(2)"><div class="day-num beginner">02</div><div class="day-info"><div class="day-title">入口与启动</div><div class="day-meta">CLI 解析 · 并行预加载 · 状态初始化</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(2)"></div></div>
+<div class="day-card" onclick="openDay(3)"><div class="day-num beginner">03</div><div class="day-info"><div class="day-title">终端 UI (Ink)</div><div class="day-meta">React for CLI · Box/Text · Provider</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(3)"></div></div>
+<div class="day-card" onclick="openDay(4)"><div class="day-num beginner">04</div><div class="day-info"><div class="day-title">REPL 与输入</div><div class="day-meta">交互循环 · 斜杠命令 · Early Input</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(4)"></div></div>
+<div class="day-card" onclick="openDay(5)"><div class="day-num intermediate">05</div><div class="day-info"><div class="day-title">Tool 系统基础</div><div class="day-meta">ToolDef · buildTool · 生命周期</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(5)"></div></div>
+<div class="day-card" onclick="openDay(6)"><div class="day-num intermediate">06</div><div class="day-info"><div class="day-title">消息类型与对话流</div><div class="day-meta">5 种消息 · tool_use 配对 · 规范化</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(6)"></div></div>
+<div class="day-card" onclick="openDay(7)"><div class="day-num intermediate">07</div><div class="day-info"><div class="day-title">第一周回顾 + 迷你项目</div><div class="day-meta">综合复习 · Mini Agent CLI</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(7)"></div></div>
+</div>
+
+<div class="week-section">
+<div class="week-title">🟡 第二周：实战篇</div>
+<div class="day-card" onclick="openDay(8)"><div class="day-num intermediate">08</div><div class="day-info"><div class="day-title">BashTool 深度解析</div><div class="day-meta">AST 安全解析 · 权限 · 沙盒</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(8)"></div></div>
+<div class="day-card" onclick="openDay(9)"><div class="day-num intermediate">09</div><div class="day-info"><div class="day-title">文件工具</div><div class="day-meta">Read / Write / Edit · Diff 显示</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(9)"></div></div>
+<div class="day-card" onclick="openDay(10)"><div class="day-num advanced">10</div><div class="day-info"><div class="day-title">Agent 循环</div><div class="day-meta">QueryEngine · query() · 流式响应</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(10)"></div></div>
+<div class="day-card" onclick="openDay(11)"><div class="day-num intermediate">11</div><div class="day-info"><div class="day-title">上下文管理</div><div class="day-meta">System Prompt · CLAUDE.md · 记忆</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(11)"></div></div>
+<div class="day-card" onclick="openDay(12)"><div class="day-num advanced">12</div><div class="day-info"><div class="day-title">上下文压缩</div><div class="day-meta">Snip · MicroCompact · Full Compact</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(12)"></div></div>
+<div class="day-card" onclick="openDay(13)"><div class="day-num advanced">13</div><div class="day-info"><div class="day-title">子 Agent 工具</div><div class="day-meta">Agent 调用 Agent · 前台/后台</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(13)"></div></div>
+<div class="day-card" onclick="openDay(14)"><div class="day-num intermediate">14</div><div class="day-info"><div class="day-title">第二周回顾 + 项目</div><div class="day-meta">综合复习 · 功能完整 Agent CLI</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(14)"></div></div>
+</div>
+
+<div class="week-section">
+<div class="week-title">🔴 第三周：进阶篇</div>
+<div class="day-card" onclick="openDay(15)"><div class="day-num advanced">15</div><div class="day-info"><div class="day-title">权限系统</div><div class="day-meta">多层安全 · 权限模式 · 沙盒</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(15)"></div></div>
+<div class="day-card" onclick="openDay(16)"><div class="day-num advanced">16</div><div class="day-info"><div class="day-title">MCP 协议集成</div><div class="day-meta">Model Context Protocol · 工具发现</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(16)"></div></div>
+<div class="day-card" onclick="openDay(17)"><div class="day-num advanced">17</div><div class="day-info"><div class="day-title">任务系统</div><div class="day-meta">前台/后台 · 进度追踪 · 并行</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(17)"></div></div>
+<div class="day-card" onclick="openDay(18)"><div class="day-num intermediate">18</div><div class="day-info"><div class="day-title">状态管理</div><div class="day-meta">AppState · Provider · 会话恢复</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(18)"></div></div>
+<div class="day-card" onclick="openDay(19)"><div class="day-num intermediate">19</div><div class="day-info"><div class="day-title">成本与性能</div><div class="day-meta">成本追踪 · 启动优化 · Token 预算</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(19)"></div></div>
+<div class="day-card" onclick="openDay(20)"><div class="day-num advanced">20</div><div class="day-info"><div class="day-title">多 Agent 系统</div><div class="day-meta">Team · Swarm · Coordinator · Worktree</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(20)"></div></div>
+<div class="day-card" onclick="openDay(21)"><div class="day-num advanced">21</div><div class="day-info"><div class="day-title">终极项目</div><div class="day-meta">构建你自己的 AI Agent CLI 🚀</div></div><div class="day-check" onclick="event.stopPropagation();toggleDay(21)"></div></div>
+</div>
+
+</div>
+
+<!-- 测验标签 -->
+<div id="tab-quiz" class="tab-content">
+<h2 style="font-family:var(--font-heading);margin-bottom:1rem">📝 课程测验</h2>
+<div id="quiz-container"></div>
+</div>
+
+<!-- 闪卡标签 -->
+<div id="tab-flashcards" class="tab-content">
+<h2 style="font-family:var(--font-heading);margin-bottom:1rem">🃏 复习闪卡</h2>
+<div id="flashcard-counter" style="text-align:center;color:var(--text-secondary);margin-bottom:1rem"></div>
+<div id="flashcard-container"></div>
+<div class="flashcard-nav">
+<button onclick="prevCard()">← 上一张</button>
+<button onclick="nextCard()">下一张 →</button>
+</div>
+</div>
+
+<!-- 资源标签 -->
+<div id="tab-resources" class="tab-content">
+<h2 style="font-family:var(--font-heading);margin-bottom:1rem">📚 学习资源</h2>
+
+<div class="section-card">
+<h3>📦 源码材料</h3>
+<p>• <strong>Claude Code 源码</strong> — ~/Repos/cloud-code/claude-code-source/（516K 行 TypeScript）</p>
+<p>• <strong>中文解析文档</strong> — ~/Repos/cloud-code-study/docs/guide/（12 篇深度分析）</p>
+</div>
+
+<div class="section-card">
+<h3>🔗 官方文档</h3>
+<p>• <a href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use" target="_blank">Anthropic Tool Use</a> — 工具调用官方指南</p>
+<p>• <a href="https://docs.anthropic.com/en/api/messages-streaming" target="_blank">Streaming API</a> — 流式响应文档</p>
+<p>• <a href="https://modelcontextprotocol.io/" target="_blank">MCP 协议</a> — Model Context Protocol</p>
+</div>
+
+<div class="section-card">
+<h3>🛠 框架与工具</h3>
+<p>• <a href="https://github.com/vadimdemedes/ink" target="_blank">Ink</a> — React for CLI 框架</p>
+<p>• <a href="https://github.com/tj/commander.js" target="_blank">Commander.js</a> — CLI 参数解析</p>
+<p>• <a href="https://github.com/anthropics/anthropic-sdk-typescript" target="_blank">Anthropic SDK</a> — TypeScript SDK</p>
+</div>
+</div>
+
+</main>
+
+<!-- 安装横幅 -->
+<div id="install-banner">
+<span style="font-size:1.5rem">📱</span>
+<div class="install-text"><strong>安装到主屏幕</strong><span>离线学习，随时复习</span></div>
+<button id="install-accept">安装</button>
+<button id="install-dismiss">取消</button>
+</div>
+
+<script>
+// === 数据 ===
+const dayFiles = [
+  'week-01/day-01-architecture-overview.md','week-01/day-02-entry-and-bootstrap.md','week-01/day-03-ink-terminal-ui.md',
+  'week-01/day-04-repl-and-input.md','week-01/day-05-tool-system-basics.md','week-01/day-06-message-types.md',
+  'week-01/day-07-week1-review.md','week-02/day-08-bash-tool.md','week-02/day-09-file-tools.md',
+  'week-02/day-10-agent-loop.md','week-02/day-11-context-management.md','week-02/day-12-context-compression.md',
+  'week-02/day-13-agent-tool.md','week-02/day-14-week2-review.md','week-03/day-15-permission-system.md',
+  'week-03/day-16-mcp-integration.md','week-03/day-17-task-system.md','week-03/day-18-state-management.md',
+  'week-03/day-19-cost-and-performance.md','week-03/day-20-multi-agent.md','week-03/day-21-capstone.md'
+];
+
+const quizData=[
+  {q:"Claude Code 的 Agent 循环在 query.ts 中是什么结构？",o:["for 循环","while(true) 无限循环","递归调用","Promise 链"],a:1,e:"query() 使用 while(true) 循环，直到 Claude 不再调用工具时 break。"},
+  {q:"ToolDef 中的 description 主要给谁看？",o:["开发者","用户","Claude (AI 模型)","日志系统"],a:2,e:"description 是给 Claude 看的，决定 Claude 什么时候调用哪个工具。"},
+  {q:"FileEditTool 为什么用文本匹配而不是行号？",o:["性能更好","行号会偏移","更容易实现","API 要求"],a:1,e:"多次编辑后行号会偏移，文本匹配只要内容不变就准确。"},
+  {q:"BashTool 使用什么技术检测危险命令？",o:["正则","AST 解析","字符串包含","ML 分类"],a:1,e:"AST（抽象语法树）解析比正则更准确地检测命令结构。"},
+  {q:"上下文压缩在 token 使用达到多少比例时自动触发？",o:["50%","60%","80%","95%"],a:2,e:"autoCompact 在 token 使用达到最大限制的 80% 时触发。"},
+  {q:"MCP 协议的三种能力是什么？",o:["Read/Write/Execute","Tools/Resources/Prompts","Input/Output/Error","Create/Update/Delete"],a:1,e:"MCP 提供 Tools（可调用函数）、Resources（可读数据）、Prompts（提示模板）。"},
+  {q:"多 Agent 并行时如何避免文件冲突？",o:["文件锁","Git Worktree","只读模式","排队执行"],a:1,e:"每个 Agent 在独立的 git worktree 中工作，有自己的文件副本。"},
+  {q:"子 Agent 多久后自动转为后台执行？",o:["30 秒","1 分钟","2 分钟","5 分钟"],a:2,e:"AUTO_BACKGROUND_MS = 120_000，即 2 分钟后自动后台化。"}
+];
+
+const flashcardData=[
+  {f:"Agent Loop",b:"感知→思考→行动的无限循环，由 query.ts 的 while(true) 实现"},
+  {f:"Tool 接口",b:"name + description + inputSchema + call()。30+ 工具统一接口"},
+  {f:"Ink",b:"React for CLI 框架。<Box>=<div>, <Text>=<span>，支持 Flexbox"},
+  {f:"QueryEngine",b:"每轮对话控制器。组装消息、调用 API、协调工具执行"},
+  {f:"System Prompt",b:"动态组装：角色 + 工具列表 + 规则 + 项目上下文 + CLAUDE.md"},
+  {f:"tool_use / tool_result",b:"Claude 调用工具→tool_use块，结果→tool_result块，通过ID配对"},
+  {f:"BashTool 安全",b:"AST 解析命令→只读检查→权限检查→沙盒。多层防御"},
+  {f:"old_str / new_str",b:"FileEditTool 精确编辑：文本匹配替换，避免行号偏移"},
+  {f:"上下文压缩",b:"Snip（截断）→ MicroCompact（单条摘要）→ Full Compact（对话摘要）"},
+  {f:"CLAUDE.md",b:"用户自定义指令。项目级 > 父目录级 > 用户级"},
+  {f:"子 Agent",b:"主Agent派生的独立Agent，有自己的消息列表和上下文"},
+  {f:"权限模式",b:"default(确认) / plan(只看) / auto(按规则) / bypass(绕过)"},
+  {f:"MCP",b:"AI 工具集成标准协议。Server 提供工具，Client 消费"},
+  {f:"Task 系统",b:"前台可见可中断，后台静默完成通知。支持并行"},
+  {f:"Prompt Cache",b:"缓存命中的 token 更便宜。保持 System Prompt 前缀稳定"},
+  {f:"Git Worktree",b:"多 Agent 并行时，每个 Agent 独立工作目录避免冲突"},
+  {f:"Team vs Swarm",b:"Team: 有 Coordinator 的分层协作。Swarm: 对等 Agent 网络"}
+];
+
+// === 进度管理 ===
+function getProgress(){return JSON.parse(localStorage.getItem('cc-progress')||'{}');}
+function saveProgress(p){localStorage.setItem('cc-progress',JSON.stringify(p));}
+
+function toggleDay(day){
+  const p=getProgress();
+  p[day]=!p[day];
+  saveProgress(p);
+  updateUI();
+}
+
+function updateUI(){
+  const p=getProgress();
+  const completed=Object.values(p).filter(Boolean).length;
+  document.getElementById('progress-fill').style.width=`${(completed/21)*100}%`;
+  document.getElementById('progress-label').textContent=`${completed}/21 天完成`;
+  document.getElementById('progress-pct').textContent=`${Math.round((completed/21)*100)}%`;
+  document.querySelectorAll('.day-check').forEach((el,i)=>{
+    el.className='day-check'+(p[i+1]?' done':'');
+    el.textContent=p[i+1]?'✓':'';
+  });
+  document.querySelectorAll('.day-card').forEach((el,i)=>{
+    el.classList.toggle('completed',!!p[i+1]);
+  });
+}
+
+function openDay(day){
+  const file='../'+dayFiles[day-1];
+  window.open(file,'_blank');
+}
+
+// === 标签切换 ===
+function showTab(tab){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('nav button').forEach(el=>el.classList.remove('active'));
+  event.target.classList.add('active');
+  if(tab==='quiz')renderQuiz();
+  if(tab==='flashcards')renderFlashcard();
+}
+
+// === 测验 ===
+function renderQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML=quizData.map((q,i)=>`
+    <div class="quiz-card" id="quiz-${i}">
+      <div class="question">${i+1}. ${q.q}</div>
+      ${q.o.map((opt,j)=>`<div class="quiz-option" onclick="checkAnswer(${i},${j})">${opt}</div>`).join('')}
+      <div class="quiz-explanation" id="explain-${i}">💡 ${q.e}</div>
     </div>
+  `).join('');
+}
 
-    <!-- Week 1 -->
-    <div class="week-section">
-      <div class="week-header">
-        <div class="week-number">1</div>
-        <div class="week-info"><h2>Week 1: Foundations</h2><p>基础架构 — Agent 系统、Terminal UI、Tool 设计、安全基础</p></div>
-      </div>
-      <div class="days-grid">
-        <a class="day-card completed" href="../week-01/day-01-agent-overview.md"><div class="day-header"><span class="day-number">Day 1</span><span class="day-status">✅</span></div><div class="day-title">Agent 系统概览</div><div class="day-topics">ReAct 循环、架构分层、目录结构</div></a>
-        <a class="day-card completed" href="../week-01/day-02-ink-basics.md"><div class="day-header"><span class="day-number">Day 2</span><span class="day-status">✅</span></div><div class="day-title">Terminal UI 基础 (Ink)</div><div class="day-topics">React 组件、布局系统、事件处理</div></a>
-        <a class="day-card completed" href="../week-01/day-03-ink-advanced.md"><div class="day-header"><span class="day-number">Day 3</span><span class="day-status">✅</span></div><div class="day-title">Ink 高级特性</div><div class="day-topics">自定义渲染、性能优化、流式输出</div></a>
-        <a class="day-card completed" href="../week-01/day-04-tool-system.md"><div class="day-header"><span class="day-number">Day 4</span><span class="day-status">✅</span></div><div class="day-title">Tool System 基础</div><div class="day-topics">Tool.ts、工具注册、Zod 参数验证</div></a>
-        <a class="day-card completed" href="../week-01/day-05-context-management.md"><div class="day-header"><span class="day-number">Day 5</span><span class="day-status">✅</span></div><div class="day-title">Context Management</div><div class="day-topics">上下文窗口、Prompt Cache、优化策略</div></a>
-        <a class="day-card completed" href="../week-01/day-06-bash-tool.md"><div class="day-header"><span class="day-number">Day 6</span><span class="day-status">✅</span></div><div class="day-title">BashTool 深入</div><div class="day-topics">沙盒、权限检查、23种安全规则</div></a>
-        <a class="day-card completed" href="../week-01/day-07-week1-project.md"><div class="day-header"><span class="day-number">Day 7</span><span class="day-status">✅</span></div><div class="day-title">Week 1 项目</div><div class="day-topics">构建简单的 CLI Agent (MiniAgent)</div></a>
-      </div>
-    </div>
+function checkAnswer(qi,oi){
+  const card=document.getElementById('quiz-'+qi);
+  const options=card.querySelectorAll('.quiz-option');
+  options.forEach((o,i)=>{
+    o.classList.remove('correct','incorrect');
+    if(i===quizData[qi].a)o.classList.add('correct');
+    else if(i===oi)o.classList.add('incorrect');
+    o.style.pointerEvents='none';
+  });
+  document.getElementById('explain-'+qi).style.display='block';
+}
 
-    <!-- Week 2 -->
-    <div class="week-section">
-      <div class="week-header">
-        <div class="week-number">2</div>
-        <div class="week-info"><h2>Week 2: Building</h2><p>核心能力 — 文件操作、搜索、Agent 协调、UI 组件</p></div>
-      </div>
-      <div class="days-grid">
-        <a class="day-card completed" href="../week-02/day-08-file-operations.md"><div class="day-header"><span class="day-number">Day 8</span><span class="day-status">✅</span></div><div class="day-title">File Operations</div><div class="day-topics">FileRead、FileWrite、FileEdit 工具</div></a>
-        <a class="day-card completed" href="../week-02/day-09-glob-grep.md"><div class="day-header"><span class="day-number">Day 9</span><span class="day-status">✅</span></div><div class="day-title">Glob & Grep</div><div class="day-topics">文件搜索、ripgrep、正则表达式</div></a>
-        <a class="day-card completed" href="../week-02/day-10-agent-task.md"><div class="day-header"><span class="day-number">Day 10</span><span class="day-status">✅</span></div><div class="day-title">Agent Task System</div><div class="day-topics">7种任务类型、状态机、子Agent</div></a>
-        <a class="day-card completed" href="../week-02/day-11-query-engine.md"><div class="day-header"><span class="day-number">Day 11</span><span class="day-status">✅</span></div><div class="day-title">QueryEngine 详解</div><div class="day-topics">API 调用、流式响应、错误处理</div></a>
-        <a class="day-card completed" href="../week-02/day-12-message-ui.md"><div class="day-header"><span class="day-number">Day 12</span><span class="day-status">✅</span></div><div class="day-title">Message & UI</div><div class="day-topics">消息渲染、Diff 显示、PromptInput</div></a>
-        <a class="day-card completed" href="../week-02/day-13-coordinator.md"><div class="day-header"><span class="day-number">Day 13</span><span class="day-status">✅</span></div><div class="day-title">Coordinator Mode</div><div class="day-topics">多Agent协调、并行执行、结果汇总</div></a>
-        <a class="day-card completed" href="../week-02/day-14-week2-project.md"><div class="day-header"><span class="day-number">Day 14</span><span class="day-status">✅</span></div><div class="day-title">Week 2 项目</div><div class="day-topics">构建文件处理 Agent v2.0</div></a>
+// === 闪卡 ===
+let currentCard=0;
+function renderFlashcard(){
+  const c=document.getElementById('flashcard-container');
+  const card=flashcardData[currentCard];
+  document.getElementById('flashcard-counter').textContent=`${currentCard+1} / ${flashcardData.length}`;
+  c.innerHTML=`
+    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">${card.f}</div>
+        <div class="flashcard-back">${card.b}</div>
       </div>
     </div>
+  `;
+}
+function nextCard(){currentCard=(currentCard+1)%flashcardData.length;renderFlashcard();}
+function prevCard(){currentCard=(currentCard-1+flashcardData.length)%flashcardData.length;renderFlashcard();}
 
-    <!-- Week 3 -->
-    <div class="week-section">
-      <div class="week-header">
-        <div class="week-number">3</div>
-        <div class="week-info"><h2>Week 3: Advanced</h2><p>进阶功能 — 安全审计、性能优化、MCP、生产模式</p></div>
-      </div>
-      <div class="days-grid">
-        <a class="day-card completed" href="../week-03/day-15-security.md"><div class="day-header"><span class="day-number">Day 15</span><span class="day-status">✅</span></div><div class="day-title">Security Architecture</div><div class="day-topics">4层安全、权限系统、Zsh威胁模型</div></a>
-        <a class="day-card completed" href="../week-03/day-16-anti-distillation.md"><div class="day-header"><span class="day-number">Day 16</span><span class="day-status">✅</span></div><div class="day-title">Anti-Distillation</div><div class="day-topics">假工具注入、水印、客户端认证</div></a>
-        <a class="day-card completed" href="../week-03/day-17-prompt-cache.md"><div class="day-header"><span class="day-number">Day 17</span><span class="day-status">✅</span></div><div class="day-title">Prompt Cache 优化</div><div class="day-topics">14种失效场景、Sticky Latches</div></a>
-        <a class="day-card completed" href="../week-03/day-18-performance.md"><div class="day-header"><span class="day-number">Day 18</span><span class="day-status">✅</span></div><div class="day-title">Performance</div><div class="day-topics">Ink优化、ASCII Pool、Line-width Cache</div></a>
-        <a class="day-card completed" href="../week-03/day-19-mcp.md"><div class="day-header"><span class="day-number">Day 19</span><span class="day-status">✅</span></div><div class="day-title">MCP Integration</div><div class="day-topics">Model Context Protocol、Server管理</div></a>
-        <a class="day-card completed" href="../week-03/day-20-production.md"><div class="day-header"><span class="day-number">Day 20</span><span class="day-status">✅</span></div><div class="day-title">Production Patterns</div><div class="day-topics">错误处理、日志、Feature Flags</div></a>
-        <a class="day-card completed" href="../week-03/day-21-capstone.md"><div class="day-header"><span class="day-number">Day 21</span><span class="day-status">✅</span></div><div class="day-title">Capstone Project</div><div class="day-topics">构建完整的 AI Agent CLI</div></a>
-      </div>
-    </div>
-  </div>
+// === PWA 安装 ===
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  setTimeout(()=>{
+    if(!window.matchMedia('(display-mode:standalone)').matches&&!localStorage.getItem('pwa-dismissed')){
+      document.getElementById('install-banner').style.display='flex';
+    }
+  },15000);
+});
+document.getElementById('install-accept')?.addEventListener('click',async()=>{
+  if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;}
+  document.getElementById('install-banner').style.display='none';
+});
+document.getElementById('install-dismiss')?.addEventListener('click',()=>{
+  document.getElementById('install-banner').style.display='none';
+  localStorage.setItem('pwa-dismissed',new Date().toISOString());
+});
 
-  <div class="install-prompt" id="installPrompt"><span>📱</span><span>安装到桌面</span></div>
+// === Service Worker ===
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js');
+}
 
-  <footer>
-    <p>© 2026 Claude Code 学习课程 | 基于源码分析 | 仅供学习研究</p>
-    <p style="margin-top:0.5rem;font-size:0.9rem;">
-      <a href="https://github.com/CeciliaW888/claude-code-learning">GitHub</a> | <a href="../README.md">课程文档</a>
-    </p>
-  </footer>
-
-  <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installPrompt').classList.add('show'); });
-    document.getElementById('installPrompt').addEventListener('click', async () => { if (!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt = null; });
-    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); }); }
-    const completedDays = JSON.parse(localStorage.getItem('completedDays') || '[]');
-    document.querySelectorAll('.day-card').forEach(card => {
-      const dayNum = card.querySelector('.day-number')?.textContent;
-      if (dayNum && completedDays.includes(dayNum)) { card.classList.add('completed'); const s = card.querySelector('.day-status'); if (s) s.textContent = '✅'; }
-      card.addEventListener('click', () => { if (dayNum && !completedDays.includes(dayNum)) { completedDays.push(dayNum); localStorage.setItem('completedDays', JSON.stringify(completedDays)); } });
-    });
-  </script>
+// === 初始化 ===
+updateUI();
+</script>
 </body>
 </html>

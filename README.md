@@ -1,130 +1,128 @@
-# Claude Code 源码学习课程
+# 🤖 Claude Code 源码解析：21天构建 AI Agent CLI 工具
 
-**21天从零构建 AI Agent CLI 工具**
+> 基于泄露的 Claude Code 源码，从零到一学会构建类似的 AI Agent CLI 工具
 
-## 📚 课程概览
+[![PWA Ready](https://img.shields.io/badge/PWA-Ready-c4825a)](./website/index.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![Days](https://img.shields.io/badge/课程-21天-blue.svg)](#课程大纲)
 
-本课程基于泄露的 Claude Code 真实源码（516K 行代码，1,921 个 TypeScript 文件），带你从零开始学习如何构建工业级 AI Agent CLI 工具。
+## 📖 课程简介
 
-**适合人群**：有 ChatGPT/Claude 使用经验，想要深入理解 Agent 系统架构的开发者
+这是一门基于 **Claude Code 真实源码**（516K 行 TypeScript）的深度解析课程。通过 21 天的系统学习，你将掌握构建一个类似 Claude Code 的 AI Agent CLI 工具所需的全部核心技能。
 
-**学习时长**：每天 1 小时，共 21 天
+**不是抽象理论，是真实代码。** 每一天的代码示例都直接来自 Claude Code 源码。
 
-**学习目标**：掌握 Terminal UI、Tool System、Agent 协调、安全机制等全栈技能，能够独立构建类似的 AI Agent CLI 工具
-
-## 🗓️ 课程安排
-
-### 第一周：基础架构（Foundations）
-
-| 天数 | 主题 | 核心内容 |
-|------|------|----------|
-| Day 1 | [Agent 系统概览](week-01/day-01-agent-overview.md) | ReAct 循环、架构分层、目录结构 |
-| Day 2 | [Terminal UI 基础 (Ink)](week-01/day-02-ink-basics.md) | React 组件、布局系统、事件处理 |
-| Day 3 | [Ink 高级特性](week-01/day-03-ink-advanced.md) | 自定义渲染、性能优化、流式输出 |
-| Day 4 | [Tool System 基础](week-01/day-04-tool-system.md) | Tool.ts、工具注册、参数验证 |
-| Day 5 | [Context Management](week-01/day-05-context-management.md) | 上下文窗口、Prompt Cache、优化策略 |
-| Day 6 | [BashTool 深入](week-01/day-06-bash-tool.md) | BashTool、沙盒、权限检查、安全规则 |
-| Day 7 | [Week 1 项目](week-01/day-07-week1-project.md) | 构建简单的 CLI Agent |
-
-### 第二周：核心能力（Building）
-
-| 天数 | 主题 | 核心内容 |
-|------|------|----------|
-| Day 8 | [File Operations](week-02/day-08-file-operations.md) | FileRead、FileWrite、FileEdit 工具 |
-| Day 9 | [Glob & Grep](week-02/day-09-glob-grep.md) | 文件搜索、内容检索、正则表达式 |
-| Day 10 | [Agent Task System](week-02/day-10-agent-task.md) | Task.ts、LocalAgentTask、任务编排 |
-| Day 11 | [QueryEngine 详解](week-02/day-11-query-engine.md) | API 调用、流式响应、错误处理 |
-| Day 12 | [Message & UI](week-02/day-12-message-ui.md) | 消息渲染、Diff 显示、PromptInput |
-| Day 13 | [Coordinator Mode](week-02/day-13-coordinator.md) | 多 Agent 协调、工作分配、结果汇总 |
-| Day 14 | [Week 2 项目](week-02/day-14-week2-project.md) | 构建文件处理 Agent |
-
-### 第三周：进阶功能（Advanced）
-
-| 天数 | 主题 | 核心内容 |
-|------|------|----------|
-| Day 15 | [Security Architecture](week-03/day-15-security.md) | 沙盒、权限系统、Zsh 威胁模型 |
-| Day 16 | [Anti-Distillation](week-03/day-16-anti-distillation.md) | 假工具注入、Connector Text、客户端认证 |
-| Day 17 | [Prompt Cache 优化](week-03/day-17-prompt-cache.md) | Cache-break 检测、Sticky Latches |
-| Day 18 | [Performance](week-03/day-18-performance.md) | Ink 优化、ASCII Pool、Patch Optimizer |
-| Day 19 | [MCP Integration](week-03/day-19-mcp.md) | Model Context Protocol、Server 管理 |
-| Day 20 | [Production Patterns](week-03/day-20-production.md) | 错误处理、日志、GrowthBook Feature Flags |
-| Day 21 | [Capstone Project](week-03/day-21-capstone.md) | 构建完整的 AI Agent CLI |
-
-## 🎯 学习成果
+## 🎯 学习目标
 
 完成本课程后，你将能够：
 
-- ✅ 理解工业级 Agent 系统的完整架构
-- ✅ 使用 Ink 构建美观的 Terminal UI
-- ✅ 实现安全的 Tool 系统（文件、Shell、网络）
-- ✅ 设计多 Agent 协作机制
-- ✅ 优化上下文管理和 Token 使用
-- ✅ 集成外部服务（MCP 协议）
-- ✅ 独立构建自己的 AI Agent CLI 工具
+- ✅ 理解 AI Agent CLI 工具的**完整架构**
+- ✅ 使用 Ink（React for CLI）构建**终端 UI**
+- ✅ 实现 Tool 系统：Bash、文件操作、Web 搜索等
+- ✅ 构建 **Agent 循环**：感知 → 思考 → 行动
+- ✅ 实现**上下文管理**和对话压缩
+- ✅ 设计**多 Agent 协作**和子 Agent 系统
+- ✅ 理解**安全模型**：权限控制、沙盒、命令审计
+- ✅ 构建自己的 AI Agent CLI 工具原型
 
-## 📖 如何使用本课程
+## 👤 适合谁
 
-### 在线学习
+- 有一定 Claude/ChatGPT 使用经验
+- 对 TypeScript/JavaScript 有基础了解
+- 每天能投入 **1 小时**学习
+- 想构建类似的 AI Agent 工具
 
-访问课程网站（PWA 应用，可安装到桌面）：
-```
-https://CeciliaW888.github.io/claude-code-learning/
-```
+## 📅 课程大纲
 
-### 本地学习
+### 第一周：基础篇 🟢
 
-克隆仓库并在编辑器中阅读：
+| 天 | 主题 | 关键文件 |
+|----|------|---------|
+| [Day 01](./week-01/day-01-architecture-overview.md) | 架构总览：从 `claude` 命令到完整系统 | `main.tsx`, `package.json` |
+| [Day 02](./week-01/day-02-entry-and-bootstrap.md) | 入口与启动：CLI 解析与状态初始化 | `cli.tsx`, `bootstrap/state.ts` |
+| [Day 03](./week-01/day-03-ink-terminal-ui.md) | 终端 UI：用 React 写命令行界面 | `ink/`, `components/App.tsx` |
+| [Day 04](./week-01/day-04-repl-and-input.md) | REPL 循环与用户输入处理 | `screens/REPL.tsx`, `PromptInput/` |
+| [Day 05](./week-01/day-05-tool-system-basics.md) | Tool 系统基础：注册、定义与执行 | `Tool.ts`, `tools.ts` |
+| [Day 06](./week-01/day-06-message-types.md) | 消息类型与对话流 | `types/message.ts`, `utils/messages.ts` |
+| [Day 07](./week-01/day-07-week1-review.md) | 第一周回顾 + 迷你项目 | 综合复习 |
+
+### 第二周：实战篇 🟡
+
+| 天 | 主题 | 关键文件 |
+|----|------|---------|
+| [Day 08](./week-02/day-08-bash-tool.md) | BashTool 深度解析 | `tools/BashTool/` |
+| [Day 09](./week-02/day-09-file-tools.md) | 文件工具：读、写、编辑 | `FileReadTool/`, `FileWriteTool/`, `FileEditTool/` |
+| [Day 10](./week-02/day-10-agent-loop.md) | Agent 循环：QueryEngine 与 query() | `QueryEngine.ts`, `query.ts` |
+| [Day 11](./week-02/day-11-context-management.md) | 上下文管理：System Prompt 与 CLAUDE.md | `context.ts`, `constants/prompts.ts` |
+| [Day 12](./week-02/day-12-context-compression.md) | 上下文压缩与紧凑化 | `services/compact/` |
+| [Day 13](./week-02/day-13-agent-tool.md) | 子 Agent 工具：多 Agent 协作 | `tools/AgentTool/` |
+| [Day 14](./week-02/day-14-week2-review.md) | 第二周回顾 + 项目实战 | 综合复习 |
+
+### 第三周：进阶篇 🔴
+
+| 天 | 主题 | 关键文件 |
+|----|------|---------|
+| [Day 15](./week-03/day-15-permission-system.md) | 权限系统与安全模型 | `permissions/`, `bashSecurity.ts` |
+| [Day 16](./week-03/day-16-mcp-integration.md) | MCP 协议集成 | `services/mcp/` |
+| [Day 17](./week-03/day-17-task-system.md) | 任务系统与后台执行 | `tasks/`, `Task.ts` |
+| [Day 18](./week-03/day-18-state-management.md) | 状态管理与 AppState | `state/AppState.ts` |
+| [Day 19](./week-03/day-19-cost-and-performance.md) | 成本追踪与性能优化 | `cost-tracker.ts`, `utils/` |
+| [Day 20](./week-03/day-20-multi-agent.md) | 多 Agent 系统：Team 与 Swarm | `coordinator/`, `TeamCreateTool/` |
+| [Day 21](./week-03/day-21-capstone.md) | 终极项目：构建你的 Agent CLI | 综合实战 |
+
+## 🚀 快速开始
+
 ```bash
-git clone https://github.com/CeciliaW888/claude-code-learning.git
+# 克隆课程
+git clone https://github.com/ceci-sh/claude-code-learning.git
 cd claude-code-learning
+
+# 打开 PWA 网站（离线可用）
+open website/index.html
+
+# 从第一天开始
+open week-01/day-01-architecture-overview.md
 ```
 
-### 每日学习流程
+## 📱 PWA 安装
 
-1. **阅读当天指南**（30 分钟）- 理解核心概念和代码示例
-2. **完成练习**（20 分钟）- 动手实践，加深理解
-3. **复习测验**（10 分钟）- 检验学习成果
-4. **反思记录**（5 分钟）- 写下学到的关键点
+本课程提供可安装的 PWA 网站，支持离线学习：
 
-## 📚 参考资料
+1. 打开 `website/index.html`
+2. 在浏览器中选择"安装"或"添加到主屏幕"
+3. 随时随地离线学习！
 
-### 源码仓库
-- [Cloud Code 源码](https://github.com/Janlaywss/cloud-code) - 开源版本
-- [Cloud Code Study](https://cloud-code-study.vercel.app/) - 中文源码分析文档
+## 📂 项目结构
 
-### 技术栈文档
-- [Ink](https://github.com/vadimdemedes/ink) - React for CLI
-- [TypeScript](https://www.typescriptlang.org/) - 类型系统
-- [Node.js](https://nodejs.org/) - 运行时
-- [Anthropic API](https://docs.anthropic.com/) - Claude 模型
+```
+claude-code-learning/
+├── README.md                    # 本文件
+├── week-01/                     # 第一周：基础篇
+│   ├── day-01-*.md ~ day-07-*.md
+│   └── quiz-01.json
+├── week-02/                     # 第二周：实战篇
+│   ├── day-08-*.md ~ day-14-*.md
+│   └── quiz-02.json
+├── week-03/                     # 第三周：进阶篇
+│   ├── day-15-*.md ~ day-21-*.md
+│   └── quiz-03.json
+├── projects/                    # 实战项目
+├── flashcards/                  # 闪卡复习
+├── diagrams/                    # Excalidraw 源文件
+└── website/                     # PWA 课程网站
+    ├── index.html
+    ├── manifest.json
+    ├── sw.js
+    └── offline.html
+```
 
-### 相关文章
-- [Building effective agents](https://www.anthropic.com/research/building-effective-agents) - Anthropic 官方指南
-- [ReAct: Synergizing Reasoning and Acting](https://arxiv.org/abs/2210.03629) - ReAct 论文
-- [LangChain Agents](https://python.langchain.com/docs/modules/agents/) - Agent 设计模式
+## 🔗 参考资源
 
-## 💬 社区与支持
-
-- **问题讨论**：[GitHub Issues](https://github.com/CeciliaW888/claude-code-learning/issues)
-- **学习笔记分享**：[GitHub Discussions](https://github.com/CeciliaW888/claude-code-learning/discussions)
-- **作者 RedNote**：[@702329823](https://www.xiaohongshu.com/user/profile/702329823) - AI 工具与学习分享
-
-## 🎓 进阶学习
-
-完成本课程后，可以继续学习：
-
-- **多 Agent 系统**：Team Swarm、Buddy Companion 等高级模式
-- **分布式 Agent**：跨机器协作、远程 Agent 管理
-- **领域特化**：代码审查、文档生成、测试自动化等专业场景
+- [Claude Code 源码](https://github.com/) — 516K 行 TypeScript
+- [Ink — React for CLI](https://github.com/vadimdemedes/ink) — 终端 UI 框架
+- [Anthropic API 文档](https://docs.anthropic.com/) — Claude API
+- [MCP 协议](https://modelcontextprotocol.io/) — Model Context Protocol
 
 ## 📄 License
 
-本课程内容采用 [MIT License](LICENSE) 开源。
-
-课程基于 Claude Code 源码分析，仅供学习研究使用。请尊重原项目的许可证和知识产权。
-
----
-
-**开始学习** → [Day 1: Agent 系统概览](week-01/day-01-agent-overview.md)
-
-祝学习愉快！🚀
+MIT — 学习使用，请勿用于商业发布 Claude Code 本身。
